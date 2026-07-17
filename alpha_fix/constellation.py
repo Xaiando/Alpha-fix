@@ -278,6 +278,21 @@ def constellation_overlay_alpha(
     membership_full = cv2.resize(
         membership.astype(np.float32), (width, height), interpolation=cv2.INTER_LINEAR
     )
+
+    if cfg.const_edge_snap and scale < 1.0:
+        # The flood decides connectivity at low resolution; snap the *boundary* to
+        # the full-res colour gate. A pixel is background only if the flood reached
+        # its neighbourhood AND it is on-family at full resolution. This re-sharpens
+        # colour edges and re-protects thin off-family structures (icicles, chains)
+        # that vanished under the downscale and got eroded by the flood.
+        lab_full = _to_lab(frame_bgr)
+        d2_full = (((lab_full - mean) ** 2) / var).sum(axis=-1)
+        color_rel_full = np.sqrt(np.maximum(d2_full, 0.0)) / max(spread, 1e-3)
+        on_family_full = (color_rel_full < cfg.const_color_gate).astype(np.float32)
+        membership_full *= on_family_full
+        keep_full = build_sample_mask((height, width), regions, "keep") > 0.5
+        membership_full[keep_full] = 0.0
+
     if cfg.const_feather_px > 0:
         membership_full = cv2.GaussianBlur(membership_full, (0, 0), cfg.const_feather_px)
     membership_full = np.clip(membership_full, 0.0, 1.0)

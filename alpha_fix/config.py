@@ -63,7 +63,8 @@ class AlphaFixConfig:
 
     # Constellation Seeding + geodesic flood (experimental overlay method).
     # Scout drops background seed dots; each colony walks a geodesic cost field.
-    const_work_res: int = 480          # long-edge working resolution for the flood
+    const_work_res: int = 640          # long-edge working resolution for the flood
+    const_edge_snap: bool = True       # re-snap the flood to the full-res colour boundary (sharpens edges, re-protects thin off-family structures)
     const_scout_enabled: bool = True   # let the scout teleport seed dots into new basins
     const_base_cost: float = 0.0       # per-step travel cost through pure background (keep ~0)
     const_grad_weight: float = 8.0     # how strongly L-edges resist the flood
