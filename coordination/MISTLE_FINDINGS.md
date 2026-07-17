@@ -66,6 +66,39 @@ border** — exactly what the bounded operator currently struggles with.
 GrabCut asks "what is the best partition?"; MISTLE asks "would that partition survive if
 several assumptions were slightly wrong?" — an algorithm that can **doubt its own matte**.
 
+## Real-frame audit (2026-07-17) — partial pass; do NOT integrate yet
+
+Isolated audit on the gothic frame (`scratch/real_mistle.py`), same jurisdiction/sample
+as the bounded-operator leak. Passage/wall = off-family colour OR crisp L-edge, so the
+same-colour pillar is enclosed by its own silhouette. Baseline bounded flood leaks the
+pillar (0.75 removed). Then Q_ord, Q_sab, ΔQ over 5 regions × 3 seeds × 5 parameter sets
+(work-res 480/640/800, edge threshold, band D, sabotage p, seed dropout).
+
+- **PASS (leak detection):** the leaked pillar is robustly fragile — ΔQ 0.59–0.69,
+  Q_sab→0, essentially identical across every seed and perturbation. The pillar-leak IS
+  structurally brittle and MISTLE catches it. Lantern/chain also high-ΔQ (contested —
+  correct for route-dependent props). Nothing outside the jurisdiction touched.
+- **NOT PASS (fog resilience):** full-strength sabotage (close ALL uncertain passages)
+  **over-flags legitimate narrow mist**. The real mist strip is thin and criss-crossed by
+  ornament edges, so "trusted" (far-from-edge) pixels are sparse and trusted-only
+  connectivity reaches the mist only near the seed. Q_sab is high only near the seed; most
+  genuine mist collapses → a large "contested" zone, not a clean remove/keep split. The
+  table's "true_mist ΔQ 0.11–0.26" was a near-seed box; broader mist reads contested.
+
+Verdict: MISTLE's fragility detection is real and generalizes for the LEAK, but the
+current construction fails the operator's integration gate (pillar fragile AND fog
+resilient) because it also flags legitimate narrow corridors. Confirms the operator's
+own caution. The 3-state OUTPUT (robust-bg / robust-non-bg / contested → adjudicate) is
+validated as necessary; on the real frame the contested zone is large, so adjudication
+specialists are essential, not optional.
+
+Indicated refinement (before any integration): **graded sabotage** — close only the
+*narrowest / lowest-confidence* bottlenecks (e.g. distance-to-wall ≤ 1–2, or a passage
+confidence below a cutoff), not every uncertain link, so wide-enough legitimate corridors
+survive while the pillar's true bottleneck still closes. Re-test whether legit mist regains
+resilience while the pillar stays fragile. Also consider per-pixel route-diversity /
+seed-of-arrival tracking so wide mist scores redundant even when far from the seed.
+
 ## Next / related
 
 - **Validate on the real gothic frame's actual pillar-leak** before integrating.
