@@ -116,6 +116,13 @@ Reason:
   character outside the box untouched. `tests/test_bounded_geodesic.py` (suite 19/19).
 - NN monocular depth stays PARKED (D-009): a research adviser, not a dependency to add now.
 
+Acceptance criterion (operator-confirmed): residual specks left un-removed inside the
+jurisdiction are intended scene **particles** (droplets/sparkles), and preserving them
+is CORRECT — the flood keeps them for the same reasons it keeps a prop (off-family
+colour + high local detail + geodesic isolation). Do NOT add morphological cleanup or
+lower thresholds to erase them; that would damage the scene. This also matches the video
+roadmap, where particles are temporally novel and must stay protected.
+
 Automation roadmap (learn locally under supervision, then propose globally):
   Stage 1 detect only inside the box (shipped) → Stage 2 scout proposes matching
   constellations elsewhere but does NOT remove → Stage 3 operator approves each new
