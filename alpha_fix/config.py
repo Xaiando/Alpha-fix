@@ -6,7 +6,7 @@ from typing import Literal
 from .samples import SampleRegion
 
 Mode = Literal["subject", "overlay"]
-OverlayMethod = Literal["auto_hole", "chhc"]
+OverlayMethod = Literal["auto_hole", "chhc", "constellation", "bounded_geodesic"]
 ExportFormat = Literal["png_sequence", "chroma_mp4", "webm_alpha", "prores_4444"]
 
 
@@ -60,6 +60,38 @@ class AlphaFixConfig:
     hole_seed_min_dist: float = 8.0
     hole_flood_tol: int = 18
     hole_margin_frac: float = 0.05
+
+    # Constellation Seeding + geodesic flood (experimental overlay method).
+    # Scout drops background seed dots; each colony walks a geodesic cost field.
+    const_work_res: int = 640          # long-edge working resolution for the flood
+    const_edge_snap: bool = True       # re-snap the flood to the full-res colour boundary (sharpens edges, re-protects thin off-family structures)
+    const_scout_enabled: bool = True   # let the scout teleport seed dots into new basins
+    const_base_cost: float = 0.0       # per-step travel cost through pure background (keep ~0)
+    const_grad_weight: float = 8.0     # how strongly L-edges resist the flood
+    const_barrier_floor: float = 0.5   # subtract this from normalized gradient so flat regions read 0
+    # Graded colour zones (colour_rel = Mahalanobis sigma / sampled-family spread):
+    #   <= trust        -> trusted family, zero colour penalty (open ground)
+    #   trust..gate      -> uncertain family, bounded per-step penalty (rough ground / swamp)
+    #   >= gate          -> rejected family, impassable wall
+    const_color_trust: float = 1.5        # trusted-family ceiling (no colour penalty below this)
+    const_color_gate: float = 6.0         # rejected-family wall (impassable at/above this)
+    const_color_weight: float = 4.0       # cost of crossing a colour-family *transition* (boundary, not depth)
+    const_uncertainty_weight: float = 0.0  # optional per-step toll for uncertain terrain (Sol's swamp); off by default
+    const_seed_color_tol: float = 1.5  # scout: max colour_rel to qualify as a seed dot (trusted only)
+    const_seed_grad_max: float = 0.12  # scout: max normalized barrier to qualify as a seed dot
+    const_seed_min_area_frac: float = 0.004  # scout: min basin area (frac of frame) to seed
+    const_tau_lo: float = 2.0          # geodesic cost below this reads as solid background
+    const_tau_hi: float = 30.0         # geodesic cost above this reads as foreground
+    const_feather_px: float = 1.5      # gaussian feather on the upscaled membership
+
+    # Bounded Geodesic Restoration (overlay_method="bounded_geodesic"):
+    # `basin` sample regions grant the algorithm JURISDICTION -- it only removes
+    # material inside them and never touches the rest of the frame. Everything else
+    # (Mahalanobis family, scout, geodesic flood, keep-walls, full-res colour snap)
+    # works exactly as in the constellation method, just confined to jurisdiction.
+    const_basin_dilate: int = 6        # px (work-res) to grow the rough operator box before flooding
+    const_entropy_weight: float = 0.25 # WEAK auxiliary: high local entropy slightly lowers bg-confidence (never a judge; 0 disables)
+    const_entropy_window: int = 61     # large-scale entropy window (the only scale that showed any signal)
 
     def updated(self, **overrides: object) -> "AlphaFixConfig":
         return replace(self, **overrides)

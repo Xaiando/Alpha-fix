@@ -8,7 +8,7 @@ from typing import Literal
 import cv2
 import numpy as np
 
-SampleKind = Literal["background", "keep"]
+SampleKind = Literal["background", "keep", "basin"]
 SampleShape = Literal["rectangle", "ellipse"]
 
 
@@ -43,7 +43,7 @@ class SampleRegion:
     def from_dict(cls, data: dict[str, object]) -> "SampleRegion":
         kind = str(data["kind"])
         shape = str(data["shape"])
-        if kind not in {"background", "keep"}:
+        if kind not in {"background", "keep", "basin"}:
             raise ValueError(f"Unsupported sample kind: {kind}")
         if shape not in {"rectangle", "ellipse"}:
             raise ValueError(f"Unsupported sample shape: {shape}")
@@ -112,7 +112,9 @@ def draw_sample_overlays(image_rgb: np.ndarray, sample_regions: tuple[SampleRegi
     for region in sample_regions:
         region = region.normalized()
         x0, y0, x1, y1 = region_bounds(region, width, height)
-        color = (235, 76, 64) if region.kind == "background" else (56, 196, 110)
+        color = {"background": (235, 76, 64), "keep": (56, 196, 110), "basin": (250, 204, 21)}.get(
+            region.kind, (235, 76, 64)
+        )
         if region.shape == "ellipse":
             center = ((x0 + x1) // 2, (y0 + y1) // 2)
             axes = (max(1, (x1 - x0) // 2), max(1, (y1 - y0) // 2))
