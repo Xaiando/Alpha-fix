@@ -22,6 +22,7 @@ decorative frame** and the character (Teledra). Reference asset:
 | H1 | Colour / diagonal Mahalanobis | **Falsified.** Mist and frame are the same dark blue; sampling the mist as background pulls the frame into the family and dissolves it. | Run-A/B `colour_rel`: mist ≈ frame once the family broadens. |
 | H2 | Structure / entropy **threshold** | **Falsified.** No global cut separates them: mist + distant spires score ~0.35, *higher* than a flat pillar face (0.24) and equal to ornate carving (0.36). Two failure modes cancel: spires are textured (background with structure), frame faces are smooth (foreground without). | `scratchpad/structure_probe.py`, `sweep2_structure.png`. |
 | H3 | Sharpness-barrier **geodesic flood** | **Falsified.** All smooth regions are globally connected, so a single mist seed drains the whole overlay (frame pillar leaked to α=0.24, the green flooded too). Barrier only holds at the crispest ornaments. | `scratchpad/sweep2_flood.py`, `sweep2_flood.png`. |
+| H4 | Atmospheric perspective (saturation / local contrast / blue-shift / dark-channel haze, singly + fused) | **Falsified** (swarm probe). Every channel's REMOVE-vs-KEEP margin is negative. The smooth shadowed frame *stone* mimics haze: the flat pillar face is *more* remove-like than any mist box on all four channels. Blue-shift and dark-channel run **opposite** to the hypothesis (frame is bluer; lit frame elements have a brighter dark channel). Distant spires have *higher* contrast than flat frame faces. The character sits inside the REMOVE cluster (sat 0.44, contrast 0.36). Only the flat green (already removed by sweep 1) isolates cleanly. | `scratchpad/haze_probe.py`, `haze_probe.png`. |
 
 ## What held (reusable truths)
 
@@ -43,6 +44,9 @@ it, and every smooth region is one connected basin, so any unbounded flood escap
 1. Sampling the mist as a colour background prototype (dissolves the frame).
 2. A global structure/entropy threshold to classify mist vs frame.
 3. An unbounded, single-seed sharpness/structure flood over the whole frame.
+4. Atmospheric-perspective appearance channels (saturation, local contrast, blue-shift,
+   dark-channel haze) — singly or fused; the frame stone is atmospherically
+   indistinguishable from the mist here (H4).
 
 ## Candidate directions (untested — for the swarm)
 
@@ -59,6 +63,18 @@ it, and every smooth region is one connected basin, so any unbounded flood escap
   tractable path; fits the fixed-geometry overlay use case.
 - **Multi-signal fusion inside bounded regions** (colour + defocus + depth + enclosure).
 - **Temporal (video)**: parallax and recurrence separate far background from near frame.
+
+## Swarm investigation log
+
+**Run 1 — 2026-07-17 (interrupted by session usage limit; resumable).**
+Workflow `sweep2-signal-swarm` (run `wf_96dbfde8-d7f`). Probes: defocus/focus,
+topology/enclosure, bounded-operator edge-snap, haze/saturation, multiscale-entropy,
+depth-proxy → adversarial verify → synthesize.
+
+- **Done:** `haze/saturation` → **falsified** (see H4 above).
+- **Pending (cut off by the limit, not yet run):** defocus/focus, topology/enclosure,
+  bounded-operator, multiscale-entropy, depth-proxy, and the synthesis. Resume after
+  the limit resets — the completed haze probe replays from cache.
 
 ## Reusable assets
 
