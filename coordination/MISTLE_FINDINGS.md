@@ -134,6 +134,35 @@ single-seed flood can't see). Next experiment: test enclosure (and/or two-sided 
 arcs) as the adjudicator on MISTLE's contested set. Do NOT integrate MISTLE as a solo
 tribunal; it is one voice that needs an enclosure/route co-signer.
 
+## Enclosure co-signer / Persistent Shell Adjudication (2026-07-17) — fails; root cause confirmed
+
+`scratch/enclosure_probe.py` + `scratch/enclosure_viz.py`. Persistent-shell test on the
+MISTLE-contested set: enclosure across closing radii 0/1/2/3/5px, with shell ownership by
+the border-attached frame skeleton (the guard against the old "Teledra is a hole" failure).
+
+Result: **the pillar has no persistent frame-owned shell at modest scales.** It only
+encloses at r≈12px (a fusing radius the acceptance test explicitly forbids); at r=0–6 it
+stays connected to the mist. Reason, visible in the barrier map: because the operator's
+background sample is the dark mist, the **entire dark frame is classified as background
+family**, so `off_family` barrier is nearly empty and the frame skeleton is a sliver — the
+only barriers are thin, AI-smudged crisp edges with gaps. Enclosure needs *frame-owned*
+boundary material; on this asset the frame **is** the background family.
+
+**Conclusion of the sweep-2 automation arc.** Pillar and mist are genuinely the same
+material (colour AND, apart from broken thin edges, structure). No local signal recovers
+the distinction: colour, structure, focus, haze, depth-proxy, topology (all falsified);
+MISTLE narrows but can't finish (distal mist is one-route like the leak); enclosure has no
+frame material to work with. The distinction is **semantic** — a human knows "that is a
+pillar." Pinball would meet the same same-material wall and is **not** worth building for
+this problem.
+
+**The practical resolution already ships:** Bounded Geodesic Restoration + operator
+**keep-marks** — the operator supplies the one bit of semantic meaning (mark the pillar
+keep) that no local algorithm can recover, and the maths does the rest precisely. MISTLE
+remains a **validated adviser** (a pre-filter that auto-confirms redundantly-connected
+background and flags fragile routes) for the automation roadmap's later stages, where the
+proposed new background actually differs from the frame. That is its right, bounded role.
+
 ## Next / related
 
 - **Validate on the real gothic frame's actual pillar-leak** before integrating.
