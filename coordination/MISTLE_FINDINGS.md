@@ -99,6 +99,41 @@ survive while the pillar's true bottleneck still closes. Re-test whether legit m
 resilience while the pillar stays fragile. Also consider per-pixel route-diversity /
 seed-of-arrival tracking so wide mist scores redundant even when far from the seed.
 
+## Graded sabotage + route diversity (2026-07-17) — the scalpel question, answered
+
+`scratch/graded_mistle.py`, 640px, 96 worlds × 3 seeds, three ablations. Corrections
+applied: clearance = distance-transform INSIDE the candidate mask (passage half-width,
+scaled to 640ref); sabotage decided ONCE per neck component (not per pixel); width bands
+0.95/0.70/0.30/0.08/0 with the confidence modifier and a 0.25 floor.
+
+- **Per-neck + graded FIXED the over-flagging** (the previous binary run's failure):
+  genuine mist now stays resilient (Qsab 0.77–0.96) instead of collapsing.
+- **But graded stochastic sabotage is now too gentle to catch the pillar** (pillar
+  ΔQ 0.02). As predicted, the pillar-gap is fog-coloured, so the confidence modifier
+  spares it exactly like real fog. Ablations 1–2 (width, width+confidence) do not
+  discriminate — acceptance targets missed (pillar ΔQ 0.02 « 0.45; separation 0.00).
+- **Route diversity (single-neck-removal survival) is the real discriminator, and it
+  half-works.** routeRobust: pillar 0.00 (fragile ✓), mist_near 0.60 / mist_behind_deco
+  0.76 (robust ✓) — BUT **mist_middle 0.00, mist_far 0.00**, i.e. distal legitimate mist
+  is single-route-fragile *just like the pillar*. The trusted core is small (near the
+  seed); distal mist threads out through necks, so it is one-route.
+
+**Answer to the scalpel question:** on this real frame the mist corridors are inherently
+narrow / one-route, so **MISTLE alone is not a scalpel**. Connectivity-fragility cleanly
+separates *redundantly-connected* background from *everything one-route*, but a legitimate
+dead-end mist corridor and a pillar leak are both one-route and structurally
+indistinguishable to it. MISTLE still earns its keep as a *pre-filter* — it auto-confirms
+redundant background (near/behind mist) and flags the pillar — shrinking, not solving, the
+contested set.
+
+**The missing signal must be orthogonal to connectivity.** Strongest candidate:
+**enclosure** — the pillar is bounded by a *closed* structural contour (its silhouette
+forms a loop); open mist, however narrow, is not. Plus **Pinball two-sided arrival**
+(clockwise+counterclockwise crawlers meeting behind a prop = redundant route the
+single-seed flood can't see). Next experiment: test enclosure (and/or two-sided contact
+arcs) as the adjudicator on MISTLE's contested set. Do NOT integrate MISTLE as a solo
+tribunal; it is one voice that needs an enclosure/route co-signer.
+
 ## Next / related
 
 - **Validate on the real gothic frame's actual pillar-leak** before integrating.
