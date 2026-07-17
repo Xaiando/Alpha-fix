@@ -123,6 +123,26 @@ colour + high local detail + geodesic isolation). Do NOT add morphological clean
 lower thresholds to erase them; that would damage the scene. This also matches the video
 roadmap, where particles are temporally novel and must stay protected.
 
+## D-011  (Claude, 2026-07-17)  — status: validated on synthetic (positive result)
+
+Decision:
+- **MISTLE** (adversarial connectivity audit) is the first sweep-2 direction to pass.
+  Proposed role: a *reliability tribunal* AFTER the bounded flood — it stress-tests
+  whether a removal claim survives repeated sabotage of uncertain passages, keeps what
+  is structurally redundant, and rolls back fragile leaks. Full record:
+  `coordination/MISTLE_FINDINGS.md`; reproducible probe: `scratch/mistle_probe.py`.
+
+Reason:
+- On the decisive synthetic (fog + same-colour pillar enclosed by a dark border with a
+  4px weak gap), the deterministic flood leaks the pillar and even ordinary voting is
+  fooled (Q_ord=0.95), but bridge-sabotage collapses it (Q_sab=0) → ΔQ=0.95 vs fog
+  ΔQ=0.00. It solves the exact leak the bounded operator suffers, structurally rather
+  than by appearance. Novel vs random-walker/watershed (connectivity survival under
+  controlled destruction, not diffusion/voting).
+- Not yet validated on the real frame or integrated. Geodesic Pinball (narrow-passage
+  wall-crawlers) is a complementary coverage tool, deferred; its dubious routes are
+  themselves what MISTLE would audit.
+
 Automation roadmap (learn locally under supervision, then propose globally):
   Stage 1 detect only inside the box (shipped) → Stage 2 scout proposes matching
   constellations elsewhere but does NOT remove → Stage 3 operator approves each new
