@@ -46,7 +46,7 @@ class AlphaFixProcessor:
         alpha0, confidence = self._build_anchor(frame_bgr)
 
         if self.config.mode == "overlay":
-            if self.config.overlay_method == "constellation":
+            if self.config.overlay_method in ("constellation", "bounded_geodesic"):
                 alpha = self._apply_constellation(alpha0, frame_bgr, self.config)
             elif self.config.overlay_method == "auto_hole":
                 alpha = self._apply_auto_hole(alpha0, frame_bgr, self.config)

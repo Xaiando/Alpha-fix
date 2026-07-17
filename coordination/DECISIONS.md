@@ -96,6 +96,34 @@ Known gap (for the entropy pass): a *gradual continuous* colour drift toward a
 foreground of similar colour can leak until it crosses the absolute gate; entropy /
 structure resistance is the intended second backstop.
 
+## D-010  (Claude, 2026-07-17)  — status: shipped (sweep-2 deliverable)
+
+Decision:
+- Ship **Bounded Geodesic Restoration** as `overlay_method="bounded_geodesic"`. New
+  `basin` sample kind = operator JURISDICTION: the flood only acts inside it and never
+  touches the rest of the frame, whatever its colour. Inside jurisdiction it is the full
+  constellation stack — Mahalanobis family (learned from a confirmed sample) + scout +
+  graded geodesic flood + full-res colour snap — with keep-marks as absolute walls and
+  large-scale entropy as a WEAK confidence modifier (never a judge).
+
+Principle: the operator supplies semantic jurisdiction; the mathematics supplies precision.
+
+Reason:
+- Sweep-2 same-colour separation is unsolvable by any single low-level signal (D-009).
+  Jurisdiction sidesteps the global-leak failure: it needs one bit of human meaning
+  ("removable background lives here") and then the maths is precise. Validated on the
+  real frame: mist removed inside the box, lantern kept (keep-mark), pillar/green/
+  character outside the box untouched. `tests/test_bounded_geodesic.py` (suite 19/19).
+- NN monocular depth stays PARKED (D-009): a research adviser, not a dependency to add now.
+
+Automation roadmap (learn locally under supervision, then propose globally):
+  Stage 1 detect only inside the box (shipped) → Stage 2 scout proposes matching
+  constellations elsewhere but does NOT remove → Stage 3 operator approves each new
+  colony → Stage 4 auto-accept only very-high-confidence matches → Stage 5 full-image
+  automation with uncertainty returned for review. Only operator-approved pixels ever
+  become new background signature, so a lantern that resembles fog cannot silently
+  broaden the family (no model poisoning).
+
 ## D-009  (Claude, 2026-07-17)  — status: falsified (negative result recorded)
 
 Decision:

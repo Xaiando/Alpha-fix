@@ -6,7 +6,7 @@ from typing import Literal
 from .samples import SampleRegion
 
 Mode = Literal["subject", "overlay"]
-OverlayMethod = Literal["auto_hole", "chhc", "constellation"]
+OverlayMethod = Literal["auto_hole", "chhc", "constellation", "bounded_geodesic"]
 ExportFormat = Literal["png_sequence", "chroma_mp4", "webm_alpha", "prores_4444"]
 
 
@@ -83,6 +83,15 @@ class AlphaFixConfig:
     const_tau_lo: float = 2.0          # geodesic cost below this reads as solid background
     const_tau_hi: float = 30.0         # geodesic cost above this reads as foreground
     const_feather_px: float = 1.5      # gaussian feather on the upscaled membership
+
+    # Bounded Geodesic Restoration (overlay_method="bounded_geodesic"):
+    # `basin` sample regions grant the algorithm JURISDICTION -- it only removes
+    # material inside them and never touches the rest of the frame. Everything else
+    # (Mahalanobis family, scout, geodesic flood, keep-walls, full-res colour snap)
+    # works exactly as in the constellation method, just confined to jurisdiction.
+    const_basin_dilate: int = 6        # px (work-res) to grow the rough operator box before flooding
+    const_entropy_weight: float = 0.25 # WEAK auxiliary: high local entropy slightly lowers bg-confidence (never a judge; 0 disables)
+    const_entropy_window: int = 61     # large-scale entropy window (the only scale that showed any signal)
 
     def updated(self, **overrides: object) -> "AlphaFixConfig":
         return replace(self, **overrides)

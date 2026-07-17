@@ -85,6 +85,22 @@ def _smoothstep(lo: float, hi: float, x: np.ndarray) -> np.ndarray:
     return (t * t * (3.0 - 2.0 * t)).astype(np.float32)
 
 
+def _local_entropy(gray_u8: np.ndarray, window: int, bins: int = 16) -> np.ndarray:
+    """Local Shannon entropy (nats) of quantized intensity in a sliding window.
+
+    Vectorized as `bins` box-filters. Used only as a *weak* confidence modifier:
+    large-scale entropy is the one appearance signal that showed any separation
+    between smooth background and structured foreground, but far too weak to judge.
+    """
+    q = np.clip((gray_u8.astype(np.int32) * bins) // 256, 0, bins - 1)
+    ksize = (max(3, window), max(3, window))
+    entropy = np.zeros(gray_u8.shape, dtype=np.float32)
+    for b in range(bins):
+        p = cv2.boxFilter((q == b).astype(np.float32), -1, ksize)
+        entropy -= np.where(p > 0, p * np.log(p + 1e-12), 0.0).astype(np.float32)
+    return entropy
+
+
 def _geodesic_distance(cost: np.ndarray, seeds: np.ndarray) -> np.ndarray:
     """Exact multi-source geodesic distance via Dijkstra (4-connectivity).
 
@@ -231,8 +247,22 @@ def constellation_overlay_alpha(
     barrier = np.clip(grad / p95 - cfg.const_barrier_floor, 0.0, 4.0).astype(np.float32)
 
     keep = build_sample_mask((h, w), regions, "keep") > 0.5
+
+    # --- Jurisdiction: `basin` regions bound where the flood may act -----
+    # With no basin regions this is the whole frame (the global constellation
+    # method). With basin regions (Bounded Geodesic Restoration) the flood is
+    # confined to the operator's rough box, so the rest of the frame is never
+    # touched no matter what its colour is.
+    basin = build_sample_mask((h, w), regions, "basin") > 0.5
+    bounded = bool(basin.any())
+    if bounded:
+        r = max(1, int(cfg.const_basin_dilate))
+        jurisdiction = cv2.dilate(basin.astype(np.uint8), np.ones((2 * r + 1, 2 * r + 1), np.uint8)) > 0
+    else:
+        jurisdiction = np.ones((h, w), dtype=bool)
+
     off_family = color_rel >= cfg.const_color_gate  # rejected family -> walls
-    forbidden = keep | off_family
+    forbidden = keep | off_family | (~jurisdiction)
 
     # --- Seeds: operator circles + scouted constellation dots ------------
     # The scout only founds colonies in *trusted* basins (const_seed_color_tol
@@ -275,6 +305,15 @@ def constellation_overlay_alpha(
     membership[np.isinf(geodesic)] = 0.0
     membership[keep] = 0.0
 
+    # Weak entropy modifier (adviser, not judge): highly-structured neighbourhoods
+    # get their background-confidence nudged down. Bounded in [1-w, 1]; never zeroes.
+    # Only active for Bounded Geodesic Restoration (inside an operator jurisdiction).
+    if bounded and cfg.const_entropy_weight > 0.0:
+        gray_u8 = cv2.cvtColor(work, cv2.COLOR_BGR2GRAY)
+        ent = _local_entropy(gray_u8, cfg.const_entropy_window)
+        ent_n = np.clip(ent / (float(np.percentile(ent, 95)) + 1e-6), 0.0, 1.0)
+        membership *= (1.0 - float(cfg.const_entropy_weight) * ent_n).astype(np.float32)
+
     membership_full = cv2.resize(
         membership.astype(np.float32), (width, height), interpolation=cv2.INTER_LINEAR
     )
@@ -292,6 +331,13 @@ def constellation_overlay_alpha(
         membership_full *= on_family_full
         keep_full = build_sample_mask((height, width), regions, "keep") > 0.5
         membership_full[keep_full] = 0.0
+
+    if bounded:
+        # Hard clamp: nothing outside the operator's jurisdiction is ever removed.
+        jurisdiction_full = cv2.resize(
+            jurisdiction.astype(np.uint8), (width, height), interpolation=cv2.INTER_NEAREST
+        ) > 0
+        membership_full *= jurisdiction_full
 
     if cfg.const_feather_px > 0:
         membership_full = cv2.GaussianBlur(membership_full, (0, 0), cfg.const_feather_px)

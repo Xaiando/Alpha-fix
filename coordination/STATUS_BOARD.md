@@ -11,7 +11,8 @@ Last updated: 2026-07-17 (Claude)
 | Lane | Scope | Owner | Status | Current Evidence | Next Action |
 | --- | --- | --- | --- | --- | --- |
 | Constellation overlay (v1 sandbox) | `alpha_fix` | Claude | implemented + validated on real frame | `--overlay-method constellation`; scout + geodesic flood + graded colour transition; removes green+fog+disconnected panel, keeps frame/character/lamps | sweep-1 edge-fidelity pass (full-res colour snap) |
-| Sweep-2 same-colour bg (research) | `alpha_fix` | Claude | **falsified (negative result)** | global automation dead-ends recorded in `coordination/SWEEP2_FINDINGS.md`; keep walls held | swarm to explore defocus / depth / frame-topology / bounded operators |
+| Sweep-2 same-colour bg (research) | `alpha_fix` | Claude | **falsified (negative result)** | global automation dead-ends recorded in `coordination/SWEEP2_FINDINGS.md` + `SWEEP2_SWARM_REPORT.md` (8 approaches); keep walls held | NN monocular depth parked as optional frontier |
+| Bounded Geodesic Restoration (sweep-2 deliverable) | `alpha_fix` | Claude | shipped | `overlay_method=bounded_geodesic`; `basin` jurisdiction + Mahalanobis + geodesic + full-res snap + weak entropy; validated on real frame (mist removed in-box, props/outside kept); `tests/test_bounded_geodesic.py` (19/19) | automation roadmap Stage 2: scout proposes globally, operator approves |
 | Production stability | `graduate_to_alpha_fix` | Codex | active | `alpha_fix` runs, tests pass, CHHC margin typing fixed | rebuild guided sampling workflow from historical UI |
 | Sandbox overlay topology | `sandbox_only_alpha_fix_2` | Codex + Antigravity | active | `auto_hole` finds seeds, but still opens wrong regions on real overlay still | improve seed ranking and outer-frame model |
 | Sandbox debug UX | `sandbox_only_alpha_fix_2` | Codex | implemented | seed map and frame mask are now visible in sandbox GUI | validate on real overlay clips |
