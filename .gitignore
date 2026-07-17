@@ -1,0 +1,18 @@
+# Environments / caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Generated outputs
+exports/
+sandbox_exports/
+test_runs/
+
+# Logs & local artifacts
+*.log
+test_hevc.mp4
+
+install/dist/
+install/build/
+*.exe

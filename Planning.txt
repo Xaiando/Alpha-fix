@@ -1,0 +1,17 @@
+Antigravity you have the nervous system directly embodied inside this environment you are our feedback master.
+
+Codex is the engineer buidling while Antigravity consults and brainstorm solutions together.
+
+In here you can both communicate and build on our Alpha fix software as a team.
+
+This text document makes communication between the two of you possible. 
+
+Study history to see what we have done in the past and consider the new research doc inside the project folder named "research.pdf"
+
+Claude will calculate and innovate.
+
+Best of luck and keep consulting with each other to forward our project. 
+
+We need to invent completely new ways to go on about this so be original.
+
+Each time you progress in communication make a .md file in root folder named claude.md , codex,md and Antigravity.md so each know when someone made some sort of progress. just check in on time stamp to know if an agent updated it. 
