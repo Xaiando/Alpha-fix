@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 
 from .config import AlphaFixConfig
+from .constellation import constellation_overlay_alpha
 from .samples import build_sample_mask, collect_sample_pixels
 
 
@@ -45,7 +46,9 @@ class AlphaFixProcessor:
         alpha0, confidence = self._build_anchor(frame_bgr)
 
         if self.config.mode == "overlay":
-            if self.config.overlay_method == "auto_hole":
+            if self.config.overlay_method == "constellation":
+                alpha = self._apply_constellation(alpha0, frame_bgr, self.config)
+            elif self.config.overlay_method == "auto_hole":
                 alpha = self._apply_auto_hole(alpha0, frame_bgr, self.config)
             else:
                 alpha = (
@@ -387,6 +390,22 @@ class AlphaFixProcessor:
         feather_zone = (dist_inside > 0) & (dist_inside <= cfg.chhc_feather_r)
         alpha_overlay[feather_zone] = dist_inside[feather_zone] / max(cfg.chhc_feather_r, 1e-6)
         return np.clip(alpha_overlay, 0.0, 1.0).astype(np.float32)
+
+    def _apply_constellation(
+        self,
+        alpha0: np.ndarray,
+        frame_bgr: np.ndarray,
+        cfg: AlphaFixConfig,
+    ) -> np.ndarray:
+        result = constellation_overlay_alpha(frame_bgr, cfg.sample_regions, cfg)
+        if result is None:
+            # No usable background family sampled -> fall back to the hole carver.
+            return self._apply_chhc(alpha0, frame_bgr, cfg)
+        alpha = result if isinstance(result, np.ndarray) else result[0]
+        keep_mask = self._overlay_keep_mask(alpha0.shape)
+        if np.any(keep_mask > 0.0):
+            alpha = np.maximum(alpha, keep_mask)
+        return np.clip(alpha, 0.0, 1.0).astype(np.float32)
 
     def _apply_auto_hole(
         self,

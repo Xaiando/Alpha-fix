@@ -14,7 +14,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--input", help="Input image or video path.")
     parser.add_argument("--output", help="Output directory for exported frames and media.")
     parser.add_argument("--mode", choices=("subject", "overlay"), default="overlay")
-    parser.add_argument("--overlay-method", choices=("auto_hole", "chhc"), default="auto_hole")
+    parser.add_argument("--overlay-method", choices=("auto_hole", "chhc", "constellation"), default="auto_hole")
     parser.add_argument(
         "--export-format",
         choices=("prores_4444", "webm_alpha", "chroma_mp4", "png_sequence"),

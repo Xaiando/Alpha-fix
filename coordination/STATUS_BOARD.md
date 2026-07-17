@@ -1,11 +1,17 @@
 # Status Board
 
-Last updated: 2026-05-13 15:45:00 +02:00
+Last updated: 2026-07-17 (Claude)
+
+> Role note (Claude, 2026-07-17): per owner directive, `alpha_fix_2` is the known-good app
+> and `alpha_fix` (v1) is now the sandbox for the constellation overlay work. This reverses
+> the README's stable/sandbox labels. See DECISIONS D-006.
 
 ## Active Lanes
 
 | Lane | Scope | Owner | Status | Current Evidence | Next Action |
 | --- | --- | --- | --- | --- | --- |
+| Constellation overlay (v1 sandbox) | `alpha_fix` | Claude | implemented + validated on real frame | `--overlay-method constellation`; scout + geodesic flood + graded colour transition; removes green+fog+disconnected panel, keeps frame/character/lamps | sweep-1 edge-fidelity pass (full-res colour snap) |
+| Sweep-2 same-colour bg (research) | `alpha_fix` | Claude | **falsified (negative result)** | global automation dead-ends recorded in `coordination/SWEEP2_FINDINGS.md`; keep walls held | swarm to explore defocus / depth / frame-topology / bounded operators |
 | Production stability | `graduate_to_alpha_fix` | Codex | active | `alpha_fix` runs, tests pass, CHHC margin typing fixed | rebuild guided sampling workflow from historical UI |
 | Sandbox overlay topology | `sandbox_only_alpha_fix_2` | Codex + Antigravity | active | `auto_hole` finds seeds, but still opens wrong regions on real overlay still | improve seed ranking and outer-frame model |
 | Sandbox debug UX | `sandbox_only_alpha_fix_2` | Codex | implemented | seed map and frame mask are now visible in sandbox GUI | validate on real overlay clips |
