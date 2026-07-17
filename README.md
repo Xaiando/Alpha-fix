@@ -7,6 +7,18 @@ Alpha Fix now has two parallel desktop apps inside this folder:
 
 Both apps are Python/OpenCV desktop tools for extracting OBS-ready overlays from stills or video.
 
+## Current status (2026-07)
+
+> The stable/sandbox roles below are **reversed** from current practice:
+>
+> - **`alpha_fix_2`** is the best-performing / main operator application.
+> - **`alpha_fix`** is now the **research sandbox** — it hosts the newer overlay methods
+>   `constellation` (Constellation Seeding + graded geodesic flood) and `bounded_geodesic`
+>   (Bounded Geodesic Restoration: operator jurisdiction + Mahalanobis + geodesic + keep-walls).
+>
+> Full write-up of that work and the sweep-2 research boundary:
+> [`documents/CONSTELLATION_AND_SWEEP2.md`](documents/CONSTELLATION_AND_SWEEP2.md).
+
 ## Branch Roles
 
 `alpha_fix` keeps the conservative live workflow:

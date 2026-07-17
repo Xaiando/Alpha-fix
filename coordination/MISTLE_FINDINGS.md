@@ -153,8 +153,11 @@ material (colour AND, apart from broken thin edges, structure). No local signal 
 the distinction: colour, structure, focus, haze, depth-proxy, topology (all falsified);
 MISTLE narrows but can't finish (distal mist is one-route like the leak); enclosure has no
 frame material to work with. The distinction is **semantic** — a human knows "that is a
-pillar." Pinball would meet the same same-material wall and is **not** worth building for
-this problem.
+pillar." Pinball is **not falsified** here — it was never a mist-vs-pillar *classifier*.
+It solves *coverage* around known props: it cannot decide the pillar is foreground when
+pillar and mist are statistically indistinguishable, but it remains viable as a bounded
+coverage specialist to clear legitimate background *behind* a lantern once the keep
+geometry is known. Classify it as: not a solution to this ambiguity; still viable later.
 
 **The practical resolution already ships:** Bounded Geodesic Restoration + operator
 **keep-marks** — the operator supplies the one bit of semantic meaning (mark the pillar
