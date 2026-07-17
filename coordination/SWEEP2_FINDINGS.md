@@ -72,9 +72,14 @@ topology/enclosure, bounded-operator edge-snap, haze/saturation, multiscale-entr
 depth-proxy → adversarial verify → synthesize.
 
 - **Done:** `haze/saturation` → **falsified** (see H4 above).
-- **Pending (cut off by the limit, not yet run):** defocus/focus, topology/enclosure,
-  bounded-operator, multiscale-entropy, depth-proxy, and the synthesis. Resume after
-  the limit resets — the completed haze probe replays from cache.
+- **The rest were completed MANUALLY** (main session, after the swarm limit) with the
+  same measured methodology. Full ranked results: `coordination/SWEEP2_SWARM_REPORT.md`.
+  Summary: focus/defocus → FAIL; classical depth-proxy → FAIL; topology/enclosure → FAIL
+  (mist is border-connected; the character reads as an enclosed hole → would be removed);
+  multiscale-entropy → WEAK (~3% margin, not reliable alone); bounded-operator → PARTIAL
+  (containment works and preserves crisp ornaments, but smooth frame faces are still
+  eaten inside the box). Net: no single low-level signal separates mist from frame; the
+  only real frontier left is NN monocular depth (needs a model dependency).
 
 ## Reusable assets
 
