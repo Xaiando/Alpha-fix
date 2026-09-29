@@ -1,0 +1,22 @@
+{
+  "type": "alpha-fix-project",
+  "version": 1,
+  "output_dir": "..\\exports",
+  "export_format": "png_sequence",
+  "items": [
+    {
+      "path": "stream-frame.png",
+      "settings": {
+        "engine": "operator",
+        "mode": "overlay",
+        "method": "auto_hole",
+        "parameters": {
+          "border_clusters": 1,
+          "hole_dark_max": 0.2,
+          "hole_flat_max": 0.08
+        },
+        "sample_regions": []
+      }
+    }
+  ]
+}

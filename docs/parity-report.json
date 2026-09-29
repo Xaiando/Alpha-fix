@@ -1,0 +1,10 @@
+{
+  "source": "E:\\Temp\\Projects\\Tools\\Alpha Fix",
+  "numpy": "2.4.4",
+  "opencv": "4.13.0",
+  "scenarios": 22,
+  "frames_per_scenario": 4,
+  "arrays_compared": 440,
+  "maximum_difference": 0.0,
+  "failures": {}
+}

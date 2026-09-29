@@ -1,22 +1,12 @@
 Option Explicit
-
-Dim shell
-Dim fso
-Dim root
-Dim pythonw
-Dim command
-
+Dim shell, fs, root, python
 Set shell = CreateObject("WScript.Shell")
-Set fso = CreateObject("Scripting.FileSystemObject")
-root = fso.GetParentFolderName(WScript.ScriptFullName)
-pythonw = root & "\.venv\Scripts\pythonw.exe"
-
-If Not fso.FileExists(pythonw) Then
-    MsgBox "Alpha Fix is not installed in the local .venv yet." & vbCrLf & _
-        "Run 'uv sync' in this folder first.", vbExclamation, "Alpha Fix"
-    WScript.Quit 1
-End If
-
+Set fs = CreateObject("Scripting.FileSystemObject")
+root = fs.GetParentFolderName(WScript.ScriptFullName)
+python = fs.BuildPath(root, ".venv\Scripts\pythonw.exe")
 shell.CurrentDirectory = root
-command = """" & pythonw & """ -m alpha_fix.cli --gui"
-shell.Run command, 1, False
+If Not fs.FileExists(python) Then
+    MsgBox "Run Setup.bat in this folder first.", 48, "Alpha Fix"
+Else
+    shell.Run Chr(34) & python & Chr(34) & " -m alpha_fix --gui", 0, False
+End If

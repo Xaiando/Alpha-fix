@@ -1,0 +1,20 @@
+{
+  "source": "E:\\Temp\\Projects\\Tools\\Alpha Fix",
+  "sha256": {
+    "LICENSE": "946ebc7d46882d3e2a4df813832ffbbce83b88ab346f481adf9dc286cfb2405a",
+    "alpha_fix/samples.py": "f3feb7dedb3e0b36eff259c8e6ad9fd5129d2ea19df8a04f6be23075212503d1",
+    "alpha_fix/config.py": "c7aa07ebc24accd587ac6d46e140f06d819089ad2f7d07212a8c50dff67972dc",
+    "alpha_fix_2/config.py": "792b184c0c3378cfba577885cd15b3d704e7c4604001ae7ab708ed7f4d0a97f3",
+    "alpha_fix/pipeline.py": "0e67eeeafe4d5d76a281df362b9a205f4a078c778d59b7621a308d21c40d8e13",
+    "alpha_fix_2/pipeline.py": "ba74517bcc24945134154967ea83026c8a4b7630b524872e704804ec96bf20ca",
+    "alpha_fix_2/radfield.py": "1d29be68aca79e4d5a11a1ee40d2925805f7e95276bb9836f38742ec5ea89ee3",
+    "alpha_fix/constellation.py": "e9bd3c2e4444fdcc44598e3f96e8bfbd36cce2ca40b9fe3225ba864405124be6",
+    "alpha_fix/probes.py": "a4f46fa9f5f9aef62491528de37ac5098417cbd7fe3de62dce98d9170eb31521",
+    "tests/test_pipeline.py": "25f9ad9f6134f014f526da9a3cb4ff7b0f81268ecfe816521c6b1728d812c294",
+    "tests/test_sandbox_pipeline.py": "12e1008940f83896a83247afc6cb6acbbabfd384c30f43647cc6a7aeaa2f60a0",
+    "tests/test_constellation.py": "0601d6c2252af207b89e40cf305fec1a89f4e16b5901747a64ebc5d854db3231",
+    "tests/test_bounded_geodesic.py": "e2beb9a90c7ed000a9394dae31323f8d7911f7970fd349f4c7c9cd579b52b94f",
+    "tests/test_concurrent_probes.py": "e172eba6e627df72d623a4e0da908d52b84553f7e2604fc6a6c761123bc78d92",
+    "tests/test_v2_preset_compatibility.py": "238be60831e96612dba264806c7322c998dcc552e80dfa151e18b3fe9d391f8a"
+  }
+}
