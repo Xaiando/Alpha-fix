@@ -1,71 +1,37 @@
-# Alpha Fix
+# Alpha Fix 3
 
-Alpha Fix now has two parallel desktop apps inside this folder:
+A rewrite of Alpha Fix's desktop interface, project model, media handling and export service. The original operator and research algorithms are preserved. See `docs/REWRITE.md` for migration and verification details.
 
-- `alpha_fix`: stable operator-facing branch.
-- `alpha_fix_2`: sandbox branch for aggressive experimentation and debug-heavy previews.
-
-Both apps are Python/OpenCV desktop tools for extracting OBS-ready overlays from stills or video.
-
-## Current status (2026-07)
-
-> The stable/sandbox roles below are **reversed** from current practice:
->
-> - **`alpha_fix_2`** is the best-performing / main operator application.
-> - **`alpha_fix`** is now the **research sandbox** — it hosts the newer overlay methods
->   `constellation` (Constellation Seeding + graded geodesic flood) and `bounded_geodesic`
->   (Bounded Geodesic Restoration: operator jurisdiction + Mahalanobis + geodesic + keep-walls).
->
-> Full write-up of that work and the sweep-2 research boundary:
-> [`documents/CONSTELLATION_AND_SWEEP2.md`](documents/CONSTELLATION_AND_SWEEP2.md).
-
-## Branch Roles
-
-`alpha_fix` keeps the conservative live workflow:
-
-- `subject` mode uses a border-palette anchor matte plus EMA and LIPC.
-- `overlay` mode uses the existing CHHC / auto-hole path.
-- guided samples can now be drawn on the first frame and saved as JSON presets.
-- exports PNG sequences plus optional media artifacts: `prores_4444`, `webm_alpha`, `chroma_mp4`
-
-`alpha_fix_2` is the experimental branch:
-
-- keeps the same subject baseline
-- adds sandbox-only overlay method switching
-- includes an `auto_hole` overlay experiment with hole-discovery debug views
-
-## Run
+Double-click **Alpha Fix.lnk** or **Alpha Fix.vbs** to open the app without a console. The environment and shortcut are already prepared in this folder. On a new machine, run **Setup.bat** to install dependencies using uv. **Alpha Fix.bat** starts the app with console diagnostics.
 
 ```powershell
 uv sync
 uv run alpha-fix --gui
-uv run alpha-fix-2 --gui
+uv run alpha-fix --help
+uv run pytest
 ```
 
-## Open Like An App
+Open `examples/Demo.afix` from **Open project** to try the included geometric stream overlay.
 
-After `uv sync`, you can launch either app by double-clicking:
+1. Add images, videos, or a folder. Select a file in the queue.
+2. Choose **Operator** for the original v2 methods or **Research** for the original v1 methods.
+3. Choose a sample tool and drag on the source. Use **Update preview** after changing settings or samples.
+4. Compare the result, inspect the alpha matte, or scrub to another frame. Scroll to zoom and middle-drag to pan.
+5. Choose a destination and export the selected file or the whole queue. Each run creates a new folder.
+6. Save an `.afix` project to retain all file settings and samples. **Load preset** accepts old sample JSON.
 
-- `Alpha Fix.vbs` or `Alpha Fix.lnk`
-- `Alpha Fix Sandbox.vbs` or `Alpha Fix Sandbox.lnk`
+Research **Bounded geodesic** needs both a basin and a background sample to remove anything. **Advanced settings** exposes the original algorithm controls. **Apply settings to all** copies the selected file's settings and samples to every queued file.
 
-If the `.lnk` shortcuts are missing, run:
+Command-line examples:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File ".\Install Shortcuts.ps1"
+uv run alpha-fix --input "input.mp4" --output ".\exports" --mode subject
+uv run alpha-fix --input "input.png" --output ".\exports" --sample-preset "samples.json"
+uv run alpha-fix --input "media-folder" --output ".\exports" --export-format webm_alpha
+uv run alpha-fix --project "my-project.afix"
+uv run alpha-fix --input "input.png" --output ".\exports" --set despill_enabled=false
 ```
 
-CLI export examples:
+FFmpeg on PATH is required for video formats. PNG sequences require no external encoder. Video exports omit audio and use the reported source frame rate. See [rewrite details](docs/REWRITE.md) for architecture, compatibility and verification.
 
-```powershell
-uv run alpha-fix --input "input.mp4" --output ".\\exports" --mode subject
-uv run alpha-fix --input "input.png" --output ".\\exports" --mode overlay --sample-preset ".\\samples.json"
-uv run alpha-fix --input "input.mp4" --output ".\\exports" --mode overlay --export-format prores_4444
-uv run alpha-fix-2 --input "input.mp4" --output ".\\sandbox_exports" --mode overlay --overlay-method auto_hole
-```
-
-## Notes
-
-- This is still a reconstructed codebase built from the research and history files, not the original recovered repo.
-- Production and sandbox are intentionally split so experiments can move fast without destabilizing the operator path.
-- `prores_4444` and `webm_alpha` carry real alpha and can look dark in normal players because they are previewed over black.
+![Alpha Fix workspace](docs/screenshots/workspace-preview.png)

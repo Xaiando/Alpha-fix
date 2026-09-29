@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Tests (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.12', '3.13']
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff # v6
+        with:
+          version: '0.11.32'
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - name: Install Linux media and Qt runtime dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libegl1 libopengl0 libgl1 libxkbcommon0
+      - name: Install Windows media tools
+        if: runner.os == 'Windows'
+        run: choco install ffmpeg --no-progress -y
+      - name: Check media tools
+        run: |
+          ffmpeg -version
+          ffprobe -version
+      - name: Install locked dependencies
+        run: uv sync --locked --dev
+      - name: Run regression and desktop tests
+        run: uv run --locked pytest -q
+      - name: Compile source
+        run: uv run --locked python -m compileall -q src
+      - name: Check CLI
+        run: uv run --locked alpha-fix --help
+      - name: Build distributions
+        run: uv build
